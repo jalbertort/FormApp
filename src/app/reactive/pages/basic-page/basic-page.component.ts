@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-basic-page',
@@ -15,15 +15,19 @@ export class BasicPageComponent {
   // })
 
   myForm: FormGroup = this.fb.group({
-    name: [ '' ],
-    price: [ 0 ],
-    inStorage: [ 0 ],
+    name: [ '', [ Validators.required, Validators.minLength(3) ] ],
+    price: [ 0, [ Validators.required, Validators.min(0) ] ],
+    inStorage: [ 0, [ Validators.required, Validators.min(0) ] ],
   })
 
   constructor( private fb: FormBuilder ) {}
 
   onSave(): void {
+
+    if( this.myForm.invalid ) return;
+
     console.log(this.myForm.value);
+
   }
 
 }
