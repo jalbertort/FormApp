@@ -1,12 +1,17 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+const rtx5090 = {
+  name: 'RTX 5090',
+  price: 2500,
+  inStorage: 8
+}
 
 @Component({
   selector: 'app-basic-page',
   templateUrl: './basic-page.component.html'
 })
-export class BasicPageComponent {
+export class BasicPageComponent implements OnInit{
 
   // myForm: FormGroup = new FormGroup({
   //   name: new FormControl( '' ),
@@ -22,11 +27,17 @@ export class BasicPageComponent {
 
   constructor( private fb: FormBuilder ) {}
 
+  ngOnInit(): void {
+    this.myForm.reset(  rtx5090 );
+  }
+
   onSave(): void {
 
     if( this.myForm.invalid ) return;
 
     console.log(this.myForm.value);
+
+    this.myForm.reset({ price:0, inStorage:0 });
 
   }
 
