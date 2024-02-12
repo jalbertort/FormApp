@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { cantBeStrider } from '../../../shared/validators/validators';
+// import * as customValidators from '../../../shared/validators/validators';
+
+import { ValidatorsService } from '../../../shared/services/validators.service';
 
 @Component({
   selector: 'app-register-page',
@@ -9,18 +11,20 @@ import { cantBeStrider } from '../../../shared/validators/validators';
 export class RegisterPageComponent {
 
   myform: FormGroup = this.fb.group({
-    name: [ '', [ Validators.required ]],
-    email: [ '', [ Validators.required, Validators.email ]],
-    user: [ '', [ Validators.required, cantBeStrider ]],
+    name: [ '', [ Validators.required, Validators.pattern( this.validatorsService.firstNameAndLastnamePattern ) ]],
+    email: [ '', [ Validators.required, Validators.pattern( this.validatorsService.emailPattern ) ]],
+    user: [ '', [ Validators.required, this.validatorsService.cantBeStrider ]],
     password: [ '', [ Validators.required, Validators.minLength(6) ]],
-    password2: [ '', [Validators.required ]],
+    password2: [ '', [ Validators.required ]],
   });
 
-  constructor( private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private validatorsService: ValidatorsService
+  ) {}
 
-  isVAlidField( field: string): boolean | null {
-    return this.myform.controls[field].errors
-      && this.myform.controls[field].touched
+  isValidField( field: string): boolean | null {
+    return this.validatorsService.isValidField( this.myform, field );
   }
 
   onSugmit() {
